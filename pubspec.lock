@@ -153,14 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
-  charcode:
-    dependency: transitive
-    description:
-      name: charcode
-      sha256: fb0f1107cac15a5ea6ef0a6ef71a807b9e4267c713bb93e00e92d737cc8dbd8a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   checked_yaml:
     dependency: transitive
     description:
@@ -169,14 +161,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.4"
-  cli_util:
-    dependency: transitive
-    description:
-      name: cli_util
-      sha256: ff6785f7e9e3c38ac98b2fb035701789de90154024a75b6cb926445e83197d1c
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.2"
   clock:
     dependency: transitive
     description:
@@ -249,22 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  drift:
-    dependency: "direct main"
-    description:
-      name: drift
-      sha256: df027d168a2985a2e9da900adeba2ab0136f0d84436592cf3cd5135f82c8579c
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.21.0"
-  drift_dev:
-    dependency: "direct dev"
-    description:
-      name: drift_dev
-      sha256: "623649abe932fc17bd32e578e7e05f7ac5e7dd0b33e6c8669a0634105d1389bf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.21.2"
   either_dart:
     dependency: "direct main"
     description:
@@ -885,30 +853,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
-  sqlite3:
-    dependency: transitive
-    description:
-      name: sqlite3
-      sha256: f393d92c71bdcc118d6203d07c991b9be0f84b1a6f89dd4f7eed348131329924
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.9.0"
-  sqlite3_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: sqlite3_flutter_libs
-      sha256: "2b03273e71867a8a4d030861fc21706200debe5c5858a4b9e58f4a1c129586a4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.39"
-  sqlparser:
-    dependency: transitive
-    description:
-      name: sqlparser
-      sha256: d77749237609784e337ec36c979d41f6f38a7b279df98622ae23929c8eb954a4
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.39.2"
   stack_trace:
     dependency: transitive
     description:
