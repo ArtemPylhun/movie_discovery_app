@@ -4,7 +4,7 @@ import 'package:movie_discovery_app/core/usecases/base_usecase.dart';
 import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
-class SearchMovies extends BaseUseCase<List<Movie>, SearchParams> {
+class SearchMovies extends UseCase<List<Movie>, SearchParams> {
   final MovieRepository repository;
 
   SearchMovies(this.repository);

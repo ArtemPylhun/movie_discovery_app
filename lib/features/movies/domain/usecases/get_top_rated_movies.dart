@@ -4,13 +4,13 @@ import 'package:movie_discovery_app/core/usecases/base_usecase.dart';
 import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
-class GetPopularMovies extends UseCase<List<Movie>, PaginationParams> {
+class GetTopRatedMovies implements UseCase<List<Movie>, PaginationParams> {
   final MovieRepository repository;
 
-  GetPopularMovies(this.repository);
+  GetTopRatedMovies(this.repository);
 
   @override
   Future<Either<Failure, List<Movie>>> call(PaginationParams params) async {
-    return await repository.getPopularMovies(params.page);
+    return await repository.getTopRatedMovies(params.page);
   }
 }

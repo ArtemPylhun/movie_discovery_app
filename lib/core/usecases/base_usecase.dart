@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:movie_discovery_app/core/errors/failures.dart';
 
-abstract class BaseUseCase<Type, Params> {
+abstract class UseCase<Type, Params> {
   Future<Either<Failure, Type>> call(Params params);
 }
 
