@@ -82,8 +82,7 @@ class MovieDatabase extends _$MovieDatabase {
   Future<void> insertMovie(MoviesCompanion movie) =>
       into(movies).insertOnConflictUpdate(movie);
 
-  Future<void> insertMovies(List<MoviesCompanion> movieList) =>
-      batch((batch) {
+  Future<void> insertMovies(List<MoviesCompanion> movieList) => batch((batch) {
         batch.insertAllOnConflictUpdate(movies, movieList);
       });
 
@@ -115,8 +114,12 @@ class MovieDatabase extends _$MovieDatabase {
   // Cache operations
   Future<void> clearOldCache() async {
     final oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
-    await (delete(movies)..where((m) => m.updatedAt.isSmallerThanValue(oneWeekAgo))).go();
-    await (delete(searchCache)..where((s) => s.cachedAt.isSmallerThanValue(oneWeekAgo))).go();
+    await (delete(movies)
+          ..where((m) => m.updatedAt.isSmallerThanValue(oneWeekAgo)))
+        .go();
+    await (delete(searchCache)
+          ..where((s) => s.cachedAt.isSmallerThanValue(oneWeekAgo)))
+        .go();
   }
 }
 

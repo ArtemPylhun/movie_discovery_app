@@ -19,7 +19,9 @@ class MovieCard extends ConsumerWidget {
     final isFavorite = globalFavorites.contains(movie.id);
 
     // Initialize favorite status if not already loaded
-    ref.read(globalFavoritesNotifierProvider.notifier).refreshFavoriteStatus(movie.id);
+    ref
+        .read(globalFavoritesNotifierProvider.notifier)
+        .refreshFavoriteStatus(movie.id);
 
     return Card(
       elevation: 4,
@@ -41,7 +43,8 @@ class MovieCard extends ConsumerWidget {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(4)),
                       color: Colors.grey[300],
                     ),
                     child: movie.posterUrl.isNotEmpty
@@ -82,7 +85,9 @@ class MovieCard extends ConsumerWidget {
                           size: 16,
                         ),
                         onPressed: () async {
-                          await ref.read(globalFavoritesNotifierProvider.notifier).toggleFavorite(movie.id);
+                          await ref
+                              .read(globalFavoritesNotifierProvider.notifier)
+                              .toggleFavorite(movie.id);
                         },
                         padding: EdgeInsets.zero,
                       ),
@@ -92,7 +97,8 @@ class MovieCard extends ConsumerWidget {
                     bottom: 8,
                     right: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.black87,
                         borderRadius: BorderRadius.circular(12),

@@ -192,7 +192,8 @@ extension SearchMoviesStateExt on SearchMoviesState {
     required T Function() initial,
     required T Function() loading,
     required T Function(List<Movie> movies, String query) loadingMore,
-    required T Function(List<Movie> movies, String query, bool hasReachedMax) loaded,
+    required T Function(List<Movie> movies, String query, bool hasReachedMax)
+        loaded,
     required T Function(String message) error,
   }) {
     if (this is SearchMoviesInitial) {

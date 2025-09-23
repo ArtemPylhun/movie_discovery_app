@@ -76,7 +76,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
                 FavoriteMoviesSection(
                   provider: favoriteMoviesProvider,
-                  emptyMessage: 'No favorite movies yet.\nStart adding movies to your favorites!',
+                  emptyMessage:
+                      'No favorite movies yet.\nStart adding movies to your favorites!',
                 ),
               ],
             ),

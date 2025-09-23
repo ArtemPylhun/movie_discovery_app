@@ -23,7 +23,8 @@ class MovieRepositoryImpl implements MovieRepository {
       // Cache movies in local database
       await localDataSource.cacheMovies(remoteMovies.results);
 
-      return Right(remoteMovies.results.map((movie) => movie.toEntity()).toList());
+      return Right(
+          remoteMovies.results.map((movie) => movie.toEntity()).toList());
     } on ServerException catch (e) {
       // Try to get cached data on server error
       try {
@@ -47,7 +48,8 @@ class MovieRepositoryImpl implements MovieRepository {
         return Left(NetworkFailure(e.message));
       }
     } catch (e) {
-      return Left(CacheFailure('Failed to get popular movies: ${e.toString()}'));
+      return Left(
+          CacheFailure('Failed to get popular movies: ${e.toString()}'));
     }
   }
 
@@ -59,13 +61,15 @@ class MovieRepositoryImpl implements MovieRepository {
       // Cache movies in local database
       await localDataSource.cacheMovies(remoteMovies.results);
 
-      return Right(remoteMovies.results.map((movie) => movie.toEntity()).toList());
+      return Right(
+          remoteMovies.results.map((movie) => movie.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
     } catch (e) {
-      return Left(CacheFailure('Failed to get top rated movies: ${e.toString()}'));
+      return Left(
+          CacheFailure('Failed to get top rated movies: ${e.toString()}'));
     }
   }
 
@@ -77,25 +81,29 @@ class MovieRepositoryImpl implements MovieRepository {
       // Cache movies in local database
       await localDataSource.cacheMovies(remoteMovies.results);
 
-      return Right(remoteMovies.results.map((movie) => movie.toEntity()).toList());
+      return Right(
+          remoteMovies.results.map((movie) => movie.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
     } catch (e) {
-      return Left(CacheFailure('Failed to get upcoming movies: ${e.toString()}'));
+      return Left(
+          CacheFailure('Failed to get upcoming movies: ${e.toString()}'));
     }
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> searchMovies(String query, int page) async {
+  Future<Either<Failure, List<Movie>>> searchMovies(
+      String query, int page) async {
     try {
       final remoteMovies = await remoteDataSource.searchMovies(query, page);
 
       // Cache search results
       await localDataSource.cacheMovies(remoteMovies.results);
 
-      return Right(remoteMovies.results.map((movie) => movie.toEntity()).toList());
+      return Right(
+          remoteMovies.results.map((movie) => movie.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
@@ -131,10 +139,12 @@ class MovieRepositoryImpl implements MovieRepository {
         return const Right([]);
       }
 
-      final favoriteMovies = await localDataSource.getCachedMoviesByIds(favoriteIds);
+      final favoriteMovies =
+          await localDataSource.getCachedMoviesByIds(favoriteIds);
       return Right(favoriteMovies.map((movie) => movie.toEntity()).toList());
     } catch (e) {
-      return Left(CacheFailure('Failed to get favorite movies: ${e.toString()}'));
+      return Left(
+          CacheFailure('Failed to get favorite movies: ${e.toString()}'));
     }
   }
 
@@ -154,7 +164,8 @@ class MovieRepositoryImpl implements MovieRepository {
       await localDataSource.removeFromFavorites(movieId);
       return const Right(null);
     } catch (e) {
-      return Left(CacheFailure('Failed to remove from favorites: ${e.toString()}'));
+      return Left(
+          CacheFailure('Failed to remove from favorites: ${e.toString()}'));
     }
   }
 
@@ -164,7 +175,8 @@ class MovieRepositoryImpl implements MovieRepository {
       final isFav = await localDataSource.isFavorite(movieId);
       return Right(isFav);
     } catch (e) {
-      return Left(CacheFailure('Failed to check favorite status: ${e.toString()}'));
+      return Left(
+          CacheFailure('Failed to check favorite status: ${e.toString()}'));
     }
   }
 }

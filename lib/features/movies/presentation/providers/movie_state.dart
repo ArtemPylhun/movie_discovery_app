@@ -114,7 +114,8 @@ class SearchMoviesLoadingMore extends SearchMoviesState {
 }
 
 class SearchMoviesLoaded extends SearchMoviesState {
-  const SearchMoviesLoaded(this.movies, this.query, {this.hasReachedMax = false});
+  const SearchMoviesLoaded(this.movies, this.query,
+      {this.hasReachedMax = false});
 
   final List<Movie> movies;
   final String query;
@@ -137,7 +138,8 @@ class SearchMoviesError extends SearchMoviesState {
 class MovieListNotifier extends StateNotifier<MovieListState> {
   MovieListNotifier(this._useCase) : super(const MovieListInitial());
 
-  final UseCase<List<Movie>, PaginationParams> _useCase; // Can be GetPopularMovies, GetTopRatedMovies, or GetUpcomingMovies
+  final UseCase<List<Movie>, PaginationParams>
+      _useCase; // Can be GetPopularMovies, GetTopRatedMovies, or GetUpcomingMovies
   int _currentPage = 1;
   List<Movie> _allMovies = [];
 
@@ -161,7 +163,8 @@ class MovieListNotifier extends StateNotifier<MovieListState> {
 
   Future<void> loadMoreMovies() async {
     if (state is MovieListLoading || state is MovieListLoadingMore) return;
-    if (state is MovieListLoaded && (state as MovieListLoaded).hasReachedMax) return;
+    if (state is MovieListLoaded && (state as MovieListLoaded).hasReachedMax)
+      return;
 
     if (state is MovieListLoaded) {
       state = MovieListLoadingMore(_allMovies);
@@ -173,7 +176,8 @@ class MovieListNotifier extends StateNotifier<MovieListState> {
         (failure) => state = MovieListLoaded(_allMovies),
         (newMovies) {
           _allMovies.addAll(newMovies);
-          state = MovieListLoaded(_allMovies, hasReachedMax: newMovies.length < 20);
+          state =
+              MovieListLoaded(_allMovies, hasReachedMax: newMovies.length < 20);
         },
       );
     }
@@ -201,7 +205,8 @@ class MovieDetailsNotifier extends StateNotifier<MovieDetailsState> {
   Future<void> loadMovieDetails() async {
     state = const MovieDetailsLoading();
 
-    final movieResult = await _getMovieDetails.call(GetMovieDetailsParams(movieId: _movieId));
+    final movieResult =
+        await _getMovieDetails.call(GetMovieDetailsParams(movieId: _movieId));
 
     movieResult.fold(
       (failure) => state = MovieDetailsError(failure.message),
@@ -246,11 +251,13 @@ class SearchMoviesNotifier extends StateNotifier<SearchMoviesState> {
       _currentPage = 1;
       _allMovies = [];
       state = const SearchMoviesLoading();
-    } else if (state is SearchMoviesLoading || state is SearchMoviesLoadingMore) {
+    } else if (state is SearchMoviesLoading ||
+        state is SearchMoviesLoadingMore) {
       return;
     }
 
-    final result = await _searchMovies.call(SearchParams(query: query, page: _currentPage));
+    final result = await _searchMovies
+        .call(SearchParams(query: query, page: _currentPage));
 
     result.fold(
       (failure) => state = SearchMoviesError(failure.message),
@@ -260,26 +267,31 @@ class SearchMoviesNotifier extends StateNotifier<SearchMoviesState> {
         } else {
           _allMovies.addAll(movies);
         }
-        state = SearchMoviesLoaded(_allMovies, query, hasReachedMax: movies.length < 20);
+        state = SearchMoviesLoaded(_allMovies, query,
+            hasReachedMax: movies.length < 20);
       },
     );
   }
 
   Future<void> loadMoreSearchResults() async {
-    if (state is SearchMoviesLoading || state is SearchMoviesLoadingMore) return;
-    if (state is SearchMoviesLoaded && (state as SearchMoviesLoaded).hasReachedMax) return;
+    if (state is SearchMoviesLoading || state is SearchMoviesLoadingMore)
+      return;
+    if (state is SearchMoviesLoaded &&
+        (state as SearchMoviesLoaded).hasReachedMax) return;
 
     if (state is SearchMoviesLoaded) {
       state = SearchMoviesLoadingMore(_allMovies, _currentQuery);
       _currentPage++;
 
-      final result = await _searchMovies.call(SearchParams(query: _currentQuery, page: _currentPage));
+      final result = await _searchMovies
+          .call(SearchParams(query: _currentQuery, page: _currentPage));
 
       result.fold(
         (failure) => state = SearchMoviesLoaded(_allMovies, _currentQuery),
         (newMovies) {
           _allMovies.addAll(newMovies);
-          state = SearchMoviesLoaded(_allMovies, _currentQuery, hasReachedMax: newMovies.length < 20);
+          state = SearchMoviesLoaded(_allMovies, _currentQuery,
+              hasReachedMax: newMovies.length < 20);
         },
       );
     }
@@ -306,10 +318,12 @@ class FavoriteMoviesNotifier extends StateNotifier<MovieListState> {
   }
 
   Future<void> toggleFavorite(int movieId) async {
-    final result = await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
+    final result =
+        await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
 
     result.fold(
-      (failure) => <String, dynamic>{}, // Handle error silently or show snackbar
+      (failure) =>
+          <String, dynamic>{}, // Handle error silently or show snackbar
       (_) => loadFavoriteMovies(), // Reload favorites
     );
   }

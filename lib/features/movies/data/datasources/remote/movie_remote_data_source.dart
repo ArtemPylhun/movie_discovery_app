@@ -60,7 +60,8 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<MovieModel> getMovieDetails(int movieId) async {
-    final response = await apiClient.get('${ApiConstants.movieDetails}/$movieId');
+    final response =
+        await apiClient.get('${ApiConstants.movieDetails}/$movieId');
 
     return MovieModel.fromJson(response.data!);
   }

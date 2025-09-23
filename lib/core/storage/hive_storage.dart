@@ -17,7 +17,8 @@ class HiveStorage {
   // User Preferences
   static Box<dynamic> get userPrefs {
     if (_userPrefsBoxInstance == null) {
-      throw Exception('HiveStorage not initialized. Call HiveStorage.init() first.');
+      throw Exception(
+          'HiveStorage not initialized. Call HiveStorage.init() first.');
     }
     return _userPrefsBoxInstance!;
   }
@@ -25,7 +26,8 @@ class HiveStorage {
   // App Settings
   static Box<dynamic> get settings {
     if (_settingsBoxInstance == null) {
-      throw Exception('HiveStorage not initialized. Call HiveStorage.init() first.');
+      throw Exception(
+          'HiveStorage not initialized. Call HiveStorage.init() first.');
     }
     return _settingsBoxInstance!;
   }

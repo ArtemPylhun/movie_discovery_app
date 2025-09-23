@@ -35,7 +35,8 @@ class MovieDetailsScreen extends ConsumerWidget {
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Container(
                           color: Colors.grey[300],
-                          child: const Center(child: CircularProgressIndicator()),
+                          child:
+                              const Center(child: CircularProgressIndicator()),
                         ),
                         errorWidget: (context, url, error) => Container(
                           color: Colors.grey[300],
@@ -54,9 +55,13 @@ class MovieDetailsScreen extends ConsumerWidget {
                     color: isFavorite ? Colors.red : Colors.white,
                   ),
                   onPressed: () {
-                    ref.read(movieFavoriteStatusProvider(movieId).notifier).toggle();
+                    ref
+                        .read(movieFavoriteStatusProvider(movieId).notifier)
+                        .toggle();
                     // Also update the details state
-                    ref.read(movieDetailsProvider(movieId).notifier).updateFavoriteStatus(!isFavorite);
+                    ref
+                        .read(movieDetailsProvider(movieId).notifier)
+                        .updateFavoriteStatus(!isFavorite);
                   },
                 ),
               ],
@@ -82,9 +87,11 @@ class MovieDetailsScreen extends ConsumerWidget {
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => Container(
                                       color: Colors.grey[300],
-                                      child: const Center(child: CircularProgressIndicator()),
+                                      child: const Center(
+                                          child: CircularProgressIndicator()),
                                     ),
-                                    errorWidget: (context, url, error) => Container(
+                                    errorWidget: (context, url, error) =>
+                                        Container(
                                       color: Colors.grey[300],
                                       child: const Icon(Icons.movie, size: 50),
                                     ),
@@ -103,14 +110,20 @@ class MovieDetailsScreen extends ConsumerWidget {
                             children: [
                               Text(
                                 movie.title,
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 movie.originalTitle,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
                                       fontStyle: FontStyle.italic,
                                       color: Colors.grey[600],
                                     ),
@@ -126,13 +139,19 @@ class MovieDetailsScreen extends ConsumerWidget {
                                   const SizedBox(width: 4),
                                   Text(
                                     movie.rating.toStringAsFixed(1),
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
                                   ),
                                   Text(
                                     ' (${movie.voteCount} votes)',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
                                           color: Colors.grey[600],
                                         ),
                                   ),
@@ -152,9 +171,12 @@ class MovieDetailsScreen extends ConsumerWidget {
                               if (movie.genreNames.isNotEmpty) ...[
                                 Text(
                                   'Genres',
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 const SizedBox(height: 8),
                                 Wrap(
@@ -166,9 +188,13 @@ class MovieDetailsScreen extends ConsumerWidget {
                                         genre,
                                         style: const TextStyle(fontSize: 12),
                                       ),
-                                      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                                      backgroundColor: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.1),
                                       side: BorderSide(
-                                        color: Theme.of(context).primaryColor.withOpacity(0.3),
+                                        color: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.3),
                                       ),
                                     );
                                   }).toList(),
@@ -182,25 +208,30 @@ class MovieDetailsScreen extends ConsumerWidget {
                     const SizedBox(height: 24),
                     Text(
                       'Overview',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      movie.overview.isNotEmpty ? movie.overview : 'No overview available.',
+                      movie.overview.isNotEmpty
+                          ? movie.overview
+                          : 'No overview available.',
                       style: Theme.of(context).textTheme.bodyLarge,
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(height: 24),
                     Text(
                       'Additional Info',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     const SizedBox(height: 8),
-                    _buildInfoRow('Popularity', movie.popularity.toStringAsFixed(1)),
+                    _buildInfoRow(
+                        'Popularity', movie.popularity.toStringAsFixed(1)),
                     _buildInfoRow('Adult Content', movie.adult ? 'Yes' : 'No'),
                     _buildInfoRow('Genres', movie.genreNames.join(', ')),
                   ],
@@ -229,7 +260,9 @@ class MovieDetailsScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(movieDetailsProvider(movieId).notifier).loadMovieDetails();
+                    ref
+                        .read(movieDetailsProvider(movieId).notifier)
+                        .loadMovieDetails();
                   },
                   child: const Text('Retry'),
                 ),

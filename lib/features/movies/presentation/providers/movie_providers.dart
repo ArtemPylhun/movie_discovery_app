@@ -44,19 +44,23 @@ final checkFavoriteStatusProvider = Provider<CheckFavoriteStatus>(
 );
 
 // State Providers
-final popularMoviesProvider = StateNotifierProvider<MovieListNotifier, MovieListState>(
+final popularMoviesProvider =
+    StateNotifierProvider<MovieListNotifier, MovieListState>(
   (ref) => MovieListNotifier(ref.read(getPopularMoviesProvider)),
 );
 
-final topRatedMoviesProvider = StateNotifierProvider<MovieListNotifier, MovieListState>(
+final topRatedMoviesProvider =
+    StateNotifierProvider<MovieListNotifier, MovieListState>(
   (ref) => MovieListNotifier(ref.read(getTopRatedMoviesProvider)),
 );
 
-final upcomingMoviesProvider = StateNotifierProvider<MovieListNotifier, MovieListState>(
+final upcomingMoviesProvider =
+    StateNotifierProvider<MovieListNotifier, MovieListState>(
   (ref) => MovieListNotifier(ref.read(getUpcomingMoviesProvider)),
 );
 
-final movieDetailsProvider = StateNotifierProvider.family<MovieDetailsNotifier, MovieDetailsState, int>(
+final movieDetailsProvider =
+    StateNotifierProvider.family<MovieDetailsNotifier, MovieDetailsState, int>(
   (ref, movieId) => MovieDetailsNotifier(
     ref.read(getMovieDetailsProvider),
     ref.read(checkFavoriteStatusProvider),
@@ -64,11 +68,13 @@ final movieDetailsProvider = StateNotifierProvider.family<MovieDetailsNotifier, 
   ),
 );
 
-final searchMoviesStateProvider = StateNotifierProvider<SearchMoviesNotifier, SearchMoviesState>(
+final searchMoviesStateProvider =
+    StateNotifierProvider<SearchMoviesNotifier, SearchMoviesState>(
   (ref) => SearchMoviesNotifier(ref.read(searchMoviesProvider)),
 );
 
-final favoriteMoviesProvider = StateNotifierProvider<FavoriteMoviesNotifier, MovieListState>(
+final favoriteMoviesProvider =
+    StateNotifierProvider<FavoriteMoviesNotifier, MovieListState>(
   (ref) => FavoriteMoviesNotifier(
     ref.read(getFavoriteMoviesProvider),
     ref.read(toggleFavoriteProvider),

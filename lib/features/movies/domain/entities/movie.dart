@@ -32,9 +32,8 @@ class Movie extends Equatable {
   final String originalLanguage;
   final String originalTitle;
 
-  String get posterUrl => posterPath != null
-      ? 'https://image.tmdb.org/t/p/w500$posterPath'
-      : '';
+  String get posterUrl =>
+      posterPath != null ? 'https://image.tmdb.org/t/p/w500$posterPath' : '';
 
   String get backdropUrl => backdropPath != null
       ? 'https://image.tmdb.org/t/p/w780$backdropPath'

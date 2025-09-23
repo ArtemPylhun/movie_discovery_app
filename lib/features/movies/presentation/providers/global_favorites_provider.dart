@@ -4,7 +4,8 @@ import 'package:movie_discovery_app/features/movies/domain/usecases/toggle_favor
 import 'package:movie_discovery_app/features/movies/domain/usecases/check_favorite_status.dart';
 
 // Global provider to track all favorite changes
-final globalFavoritesNotifierProvider = StateNotifierProvider<GlobalFavoritesNotifier, Set<int>>(
+final globalFavoritesNotifierProvider =
+    StateNotifierProvider<GlobalFavoritesNotifier, Set<int>>(
   (ref) => GlobalFavoritesNotifier(
     getIt<ToggleFavorite>(),
     getIt<CheckFavoriteStatus>(),
@@ -12,13 +13,15 @@ final globalFavoritesNotifierProvider = StateNotifierProvider<GlobalFavoritesNot
 );
 
 class GlobalFavoritesNotifier extends StateNotifier<Set<int>> {
-  GlobalFavoritesNotifier(this._toggleFavorite, this._checkFavoriteStatus) : super(<int>{});
+  GlobalFavoritesNotifier(this._toggleFavorite, this._checkFavoriteStatus)
+      : super(<int>{});
 
   final ToggleFavorite _toggleFavorite;
   final CheckFavoriteStatus _checkFavoriteStatus;
 
   Future<bool> toggleFavorite(int movieId) async {
-    final result = await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
+    final result =
+        await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
 
     return result.fold(
       (failure) => false,

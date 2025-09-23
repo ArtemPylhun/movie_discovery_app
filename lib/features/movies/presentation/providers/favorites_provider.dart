@@ -12,7 +12,8 @@ final favoritesActionProvider = Provider<FavoritesAction>(
 );
 
 // Individual Movie Favorite Status Provider
-final movieFavoriteStatusProvider = StateNotifierProvider.family<MovieFavoriteNotifier, bool, int>(
+final movieFavoriteStatusProvider =
+    StateNotifierProvider.family<MovieFavoriteNotifier, bool, int>(
   (ref, movieId) => MovieFavoriteNotifier(
     movieId,
     ref.read(favoritesActionProvider),
@@ -26,7 +27,8 @@ class FavoritesAction {
   final CheckFavoriteStatus _checkFavoriteStatus;
 
   Future<bool> toggleFavorite(int movieId) async {
-    final result = await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
+    final result =
+        await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
 
     return result.fold(
       (failure) => false, // Return false if toggle failed

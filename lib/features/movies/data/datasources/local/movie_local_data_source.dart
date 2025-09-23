@@ -33,7 +33,8 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
 
   @override
   Future<void> cacheMovies(List<MovieModel> movies) async {
-    final companions = movies.map((movie) => _movieCompanionFromModel(movie)).toList();
+    final companions =
+        movies.map((movie) => _movieCompanionFromModel(movie)).toList();
     await database.insertMovies(companions);
   }
 

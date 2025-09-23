@@ -72,7 +72,8 @@ class RetryInterceptor extends Interceptor {
       await Future<void>.delayed(Duration(seconds: currentRetry + 1));
 
       try {
-        final response = await Dio().fetch<Map<String, dynamic>>(err.requestOptions);
+        final response =
+            await Dio().fetch<Map<String, dynamic>>(err.requestOptions);
         handler.resolve(response);
       } catch (e) {
         handler.next(err);
