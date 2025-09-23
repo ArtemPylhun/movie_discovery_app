@@ -166,9 +166,9 @@ class MovieDetailsScreen extends ConsumerWidget {
                                         genre,
                                         style: const TextStyle(fontSize: 12),
                                       ),
-                                      backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                                      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
                                       side: BorderSide(
-                                        color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
+                                        color: Theme.of(context).primaryColor.withOpacity(0.3),
                                       ),
                                     );
                                   }).toList(),

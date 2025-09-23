@@ -10,7 +10,12 @@ class ApiConstants {
     if (envKey.isNotEmpty) {
       return envKey;
     }
-    return dotenv.env['TMDB_KEY'] ?? '';
+    try {
+      return dotenv.env['TMDB_KEY'] ?? '';
+    } catch (e) {
+      // .env file not loaded, return empty string
+      return '';
+    }
   }
 
   // Endpoints
