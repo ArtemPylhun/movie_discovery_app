@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:movie_discovery_app/core/constants/genre_constants.dart';
 
 class Movie extends Equatable {
   const Movie({
@@ -40,6 +41,8 @@ class Movie extends Equatable {
       : '';
 
   double get rating => voteAverage / 2; // Convert 10-scale to 5-scale
+
+  List<String> get genreNames => GenreConstants.getGenreNames(genreIds);
 
   @override
   List<Object?> get props => [
