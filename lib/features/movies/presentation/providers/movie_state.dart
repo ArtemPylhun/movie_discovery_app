@@ -162,9 +162,12 @@ class MovieListNotifier extends StateNotifier<MovieListState> {
   }
 
   Future<void> loadMoreMovies() async {
-    if (state is MovieListLoading || state is MovieListLoadingMore) return;
-    if (state is MovieListLoaded && (state as MovieListLoaded).hasReachedMax)
+    if (state is MovieListLoading || state is MovieListLoadingMore) {
       return;
+    }
+    if (state is MovieListLoaded && (state as MovieListLoaded).hasReachedMax) {
+      return;
+    }
 
     if (state is MovieListLoaded) {
       state = MovieListLoadingMore(_allMovies);
@@ -274,10 +277,13 @@ class SearchMoviesNotifier extends StateNotifier<SearchMoviesState> {
   }
 
   Future<void> loadMoreSearchResults() async {
-    if (state is SearchMoviesLoading || state is SearchMoviesLoadingMore)
+    if (state is SearchMoviesLoading || state is SearchMoviesLoadingMore) {
       return;
+    }
     if (state is SearchMoviesLoaded &&
-        (state as SearchMoviesLoaded).hasReachedMax) return;
+        (state as SearchMoviesLoaded).hasReachedMax) {
+      return;
+    }
 
     if (state is SearchMoviesLoaded) {
       state = SearchMoviesLoadingMore(_allMovies, _currentQuery);
