@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:movie_discovery_app/core/constants/api_constants.dart';
 
 class ApiClient {
-  final Dio dio;
-
   ApiClient(this.dio) {
     dio.options = BaseOptions(
       baseUrl: ApiConstants.baseUrl,
@@ -26,25 +24,27 @@ class ApiClient {
     ]);
   }
 
-  Future<Response> get(
+  final Dio dio;
+
+  Future<Response<Map<String, dynamic>>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
-    return await dio.get(
+    return await dio.get<Map<String, dynamic>>(
       path,
       queryParameters: queryParameters,
       options: options,
     );
   }
 
-  Future<Response> post(
+  Future<Response<Map<String, dynamic>>> post(
     String path, {
-    dynamic data,
+    Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
-    return await dio.post(
+    return await dio.post<Map<String, dynamic>>(
       path,
       data: data,
       queryParameters: queryParameters,
@@ -54,9 +54,9 @@ class ApiClient {
 }
 
 class RetryInterceptor extends Interceptor {
-  final int retries;
-
   RetryInterceptor({this.retries = 3});
+
+  final int retries;
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -69,10 +69,10 @@ class RetryInterceptor extends Interceptor {
     if (currentRetry < retries && _shouldRetry(err)) {
       err.requestOptions.extra['retryCount'] = currentRetry + 1;
 
-      await Future.delayed(Duration(seconds: currentRetry + 1));
+      await Future<void>.delayed(Duration(seconds: currentRetry + 1));
 
       try {
-        final response = await Dio().fetch(err.requestOptions);
+        final response = await Dio().fetch<Map<String, dynamic>>(err.requestOptions);
         handler.resolve(response);
       } catch (e) {
         handler.next(err);
