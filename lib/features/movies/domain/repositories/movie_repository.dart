@@ -8,4 +8,10 @@ abstract class MovieRepository {
   Future<Either<Failure, List<Movie>>> getUpcomingMovies(int page);
   Future<Either<Failure, List<Movie>>> searchMovies(String query, int page);
   Future<Either<Failure, Movie>> getMovieDetails(int movieId);
+
+  // Favorites management
+  Future<Either<Failure, List<Movie>>> getFavoriteMovies();
+  Future<Either<Failure, void>> addToFavorites(int movieId);
+  Future<Either<Failure, void>> removeFromFavorites(int movieId);
+  Future<Either<Failure, bool>> isFavorite(int movieId);
 }

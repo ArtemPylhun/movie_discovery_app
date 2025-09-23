@@ -11,9 +11,9 @@ abstract class MovieRemoteDataSource {
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
-  final ApiClient apiClient;
-
   MovieRemoteDataSourceImpl(this.apiClient);
+
+  final ApiClient apiClient;
 
   @override
   Future<MovieListResponse> getPopularMovies(int page) async {
