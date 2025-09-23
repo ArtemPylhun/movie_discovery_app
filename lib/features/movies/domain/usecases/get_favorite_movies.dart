@@ -5,9 +5,9 @@ import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class GetFavoriteMovies implements UseCase<List<Movie>, NoParams> {
-  final MovieRepository repository;
-
   GetFavoriteMovies(this.repository);
+
+  final MovieRepository repository;
 
   @override
   Future<Either<Failure, List<Movie>>> call(NoParams params) async {

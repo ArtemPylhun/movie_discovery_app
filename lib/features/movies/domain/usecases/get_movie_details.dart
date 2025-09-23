@@ -6,9 +6,9 @@ import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class GetMovieDetails implements UseCase<Movie, GetMovieDetailsParams> {
-  final MovieRepository repository;
-
   GetMovieDetails(this.repository);
+
+  final MovieRepository repository;
 
   @override
   Future<Either<Failure, Movie>> call(GetMovieDetailsParams params) async {
@@ -17,9 +17,9 @@ class GetMovieDetails implements UseCase<Movie, GetMovieDetailsParams> {
 }
 
 class GetMovieDetailsParams extends Equatable {
-  final int movieId;
-
   const GetMovieDetailsParams({required this.movieId});
+
+  final int movieId;
 
   @override
   List<Object> get props => [movieId];

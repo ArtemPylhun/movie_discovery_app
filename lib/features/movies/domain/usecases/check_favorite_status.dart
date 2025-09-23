@@ -5,9 +5,9 @@ import 'package:movie_discovery_app/core/usecases/base_usecase.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class CheckFavoriteStatus implements UseCase<bool, CheckFavoriteStatusParams> {
-  final MovieRepository repository;
-
   CheckFavoriteStatus(this.repository);
+
+  final MovieRepository repository;
 
   @override
   Future<Either<Failure, bool>> call(CheckFavoriteStatusParams params) async {
@@ -16,9 +16,9 @@ class CheckFavoriteStatus implements UseCase<bool, CheckFavoriteStatusParams> {
 }
 
 class CheckFavoriteStatusParams extends Equatable {
-  final int movieId;
-
   const CheckFavoriteStatusParams({required this.movieId});
+
+  final int movieId;
 
   @override
   List<Object> get props => [movieId];

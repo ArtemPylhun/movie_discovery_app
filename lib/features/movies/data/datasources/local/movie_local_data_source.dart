@@ -15,9 +15,9 @@ abstract class MovieLocalDataSource {
 }
 
 class MovieLocalDataSourceImpl implements MovieLocalDataSource {
-  final MovieDatabase database;
-
   MovieLocalDataSourceImpl(this.database);
+
+  final MovieDatabase database;
 
   @override
   Future<List<MovieModel>> getCachedMovies() async {

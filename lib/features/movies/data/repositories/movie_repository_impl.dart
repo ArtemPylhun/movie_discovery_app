@@ -7,13 +7,13 @@ import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
-  final MovieRemoteDataSource remoteDataSource;
-  final MovieLocalDataSource localDataSource;
-
   MovieRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
   });
+
+  final MovieRemoteDataSource remoteDataSource;
+  final MovieLocalDataSource localDataSource;
 
   @override
   Future<Either<Failure, List<Movie>>> getPopularMovies(int page) async {

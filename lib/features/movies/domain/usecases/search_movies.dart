@@ -5,9 +5,9 @@ import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class SearchMovies extends UseCase<List<Movie>, SearchParams> {
-  final MovieRepository repository;
-
   SearchMovies(this.repository);
+
+  final MovieRepository repository;
 
   @override
   Future<Either<Failure, List<Movie>>> call(SearchParams params) async {
@@ -16,11 +16,11 @@ class SearchMovies extends UseCase<List<Movie>, SearchParams> {
 }
 
 class SearchParams {
-  final String query;
-  final int page;
-
   const SearchParams({
     required this.query,
     required this.page,
   });
+
+  final String query;
+  final int page;
 }

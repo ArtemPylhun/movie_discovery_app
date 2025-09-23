@@ -1,8 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:movie_discovery_app/core/errors/failures.dart';
 
-abstract class UseCase<Type, Params> {
-  Future<Either<Failure, Type>> call(Params params);
+abstract class UseCase<T, Params> {
+  Future<Either<Failure, T>> call(Params params);
 }
 
 class NoParams {
@@ -10,11 +10,11 @@ class NoParams {
 }
 
 class PaginationParams {
-  final int page;
-  final int? limit;
-
   const PaginationParams({
     required this.page,
     this.limit,
   });
+
+  final int page;
+  final int? limit;
 }

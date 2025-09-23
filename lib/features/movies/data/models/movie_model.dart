@@ -27,24 +27,6 @@ class MovieModel with _$MovieModel {
   factory MovieModel.fromJson(Map<String, dynamic> json) =>
       _$MovieModelFromJson(json);
 
-  Movie toEntity() {
-    return Movie(
-      id: id,
-      title: title,
-      overview: overview,
-      posterPath: posterPath,
-      backdropPath: backdropPath,
-      voteAverage: voteAverage,
-      voteCount: voteCount,
-      releaseDate: releaseDate,
-      genreIds: genreIds,
-      popularity: popularity,
-      adult: adult,
-      originalLanguage: originalLanguage,
-      originalTitle: originalTitle,
-    );
-  }
-
   factory MovieModel.fromEntity(Movie movie) {
     return MovieModel(
       id: movie.id,
@@ -60,6 +42,24 @@ class MovieModel with _$MovieModel {
       adult: movie.adult,
       originalLanguage: movie.originalLanguage,
       originalTitle: movie.originalTitle,
+    );
+  }
+
+  Movie toEntity() {
+    return Movie(
+      id: id,
+      title: title,
+      overview: overview,
+      posterPath: posterPath,
+      backdropPath: backdropPath,
+      voteAverage: voteAverage,
+      voteCount: voteCount,
+      releaseDate: releaseDate,
+      genreIds: genreIds,
+      popularity: popularity,
+      adult: adult,
+      originalLanguage: originalLanguage,
+      originalTitle: originalTitle,
     );
   }
 }

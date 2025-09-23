@@ -5,9 +5,9 @@ import 'package:movie_discovery_app/core/usecases/base_usecase.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class ToggleFavorite implements UseCase<void, ToggleFavoriteParams> {
-  final MovieRepository repository;
-
   ToggleFavorite(this.repository);
+
+  final MovieRepository repository;
 
   @override
   Future<Either<Failure, void>> call(ToggleFavoriteParams params) async {
@@ -27,9 +27,9 @@ class ToggleFavorite implements UseCase<void, ToggleFavoriteParams> {
 }
 
 class ToggleFavoriteParams extends Equatable {
-  final int movieId;
-
   const ToggleFavoriteParams({required this.movieId});
+
+  final int movieId;
 
   @override
   List<Object> get props => [movieId];

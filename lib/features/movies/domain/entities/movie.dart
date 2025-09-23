@@ -1,20 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class Movie extends Equatable {
-  final int id;
-  final String title;
-  final String overview;
-  final String? posterPath;
-  final String? backdropPath;
-  final double voteAverage;
-  final int voteCount;
-  final String releaseDate;
-  final List<int> genreIds;
-  final double popularity;
-  final bool adult;
-  final String originalLanguage;
-  final String originalTitle;
-
   const Movie({
     required this.id,
     required this.title,
@@ -30,6 +16,20 @@ class Movie extends Equatable {
     required this.originalLanguage,
     required this.originalTitle,
   });
+
+  final int id;
+  final String title;
+  final String overview;
+  final String? posterPath;
+  final String? backdropPath;
+  final double voteAverage;
+  final int voteCount;
+  final String releaseDate;
+  final List<int> genreIds;
+  final double popularity;
+  final bool adult;
+  final String originalLanguage;
+  final String originalTitle;
 
   String get posterUrl => posterPath != null
       ? 'https://image.tmdb.org/t/p/w500$posterPath'
