@@ -1,0 +1,14 @@
+pre-commit:
+  commands:
+    format:
+      run: dart format .
+      stage_fixed: true
+    analyze:
+      run: flutter analyze --fatal-infos
+
+pre-push:
+  commands:
+    tests:
+      run: flutter test --coverage
+    build:
+      run: flutter build apk --debug
