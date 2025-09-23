@@ -99,7 +99,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
       voteAverage: Value(movie.voteAverage),
       voteCount: Value(movie.voteCount),
       releaseDate: Value(movie.releaseDate),
-      genreIds: Value(movie.genreIds.join(',')),
+      genreIds: Value(movie.genreIds?.join(',') ?? ''),
       popularity: Value(movie.popularity),
       adult: Value(movie.adult),
       originalLanguage: Value(movie.originalLanguage),

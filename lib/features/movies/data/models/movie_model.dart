@@ -5,6 +5,16 @@ part 'movie_model.freezed.dart';
 part 'movie_model.g.dart';
 
 @freezed
+class Genre with _$Genre {
+  const factory Genre({
+    required int id,
+    required String name,
+  }) = _Genre;
+
+  factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
+}
+
+@freezed
 class MovieModel with _$MovieModel {
   const factory MovieModel({
     required int id,
@@ -15,7 +25,8 @@ class MovieModel with _$MovieModel {
     @JsonKey(name: 'vote_average') required double voteAverage,
     @JsonKey(name: 'vote_count') required int voteCount,
     @JsonKey(name: 'release_date') required String releaseDate,
-    @JsonKey(name: 'genre_ids') required List<int> genreIds,
+    @JsonKey(name: 'genre_ids') List<int>? genreIds,
+    List<Genre>? genres,
     required double popularity,
     required bool adult,
     @JsonKey(name: 'original_language') required String originalLanguage,
@@ -37,7 +48,7 @@ class MovieModel with _$MovieModel {
       voteAverage: movie.voteAverage,
       voteCount: movie.voteCount,
       releaseDate: movie.releaseDate,
-      genreIds: movie.genreIds,
+      genreIds: movie.genreIds.isNotEmpty ? movie.genreIds : null,
       popularity: movie.popularity,
       adult: movie.adult,
       originalLanguage: movie.originalLanguage,
@@ -46,6 +57,11 @@ class MovieModel with _$MovieModel {
   }
 
   Movie toEntity() {
+    // Use genres if available (movie details), otherwise genreIds (movie lists)
+    final effectiveGenreIds = genres != null
+        ? genres!.map((genre) => genre.id).toList()
+        : genreIds ?? [];
+
     return Movie(
       id: id,
       title: title,
@@ -55,7 +71,7 @@ class MovieModel with _$MovieModel {
       voteAverage: voteAverage,
       voteCount: voteCount,
       releaseDate: releaseDate,
-      genreIds: genreIds,
+      genreIds: effectiveGenreIds,
       popularity: popularity,
       adult: adult,
       originalLanguage: originalLanguage,

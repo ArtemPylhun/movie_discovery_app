@@ -6,6 +6,17 @@ part of 'movie_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$GenreImpl _$$GenreImplFromJson(Map<String, dynamic> json) => _$GenreImpl(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+    );
+
+Map<String, dynamic> _$$GenreImplToJson(_$GenreImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+    };
+
 _$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
     _$MovieModelImpl(
       id: (json['id'] as num).toInt(),
@@ -16,8 +27,11 @@ _$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
       voteAverage: (json['vote_average'] as num).toDouble(),
       voteCount: (json['vote_count'] as num).toInt(),
       releaseDate: json['release_date'] as String,
-      genreIds: (json['genre_ids'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
+      genreIds: (json['genre_ids'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      genres: (json['genres'] as List<dynamic>?)
+          ?.map((e) => Genre.fromJson(e as Map<String, dynamic>))
           .toList(),
       popularity: (json['popularity'] as num).toDouble(),
       adult: json['adult'] as bool,
@@ -36,6 +50,7 @@ Map<String, dynamic> _$$MovieModelImplToJson(_$MovieModelImpl instance) =>
       'vote_count': instance.voteCount,
       'release_date': instance.releaseDate,
       'genre_ids': instance.genreIds,
+      'genres': instance.genres,
       'popularity': instance.popularity,
       'adult': instance.adult,
       'original_language': instance.originalLanguage,
