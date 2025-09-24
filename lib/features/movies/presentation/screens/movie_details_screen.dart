@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
+import 'package:movie_discovery_app/features/movies/presentation/providers/favorites_provider.dart';
 import 'package:movie_discovery_app/features/movies/presentation/providers/movie_providers.dart';
 import 'package:movie_discovery_app/features/movies/presentation/providers/movie_state.dart';
-import 'package:movie_discovery_app/features/movies/presentation/providers/favorites_provider.dart';
 
 class MovieDetailsScreen extends ConsumerWidget {
   const MovieDetailsScreen({
@@ -188,13 +188,10 @@ class MovieDetailsScreen extends ConsumerWidget {
                                         genre,
                                         style: const TextStyle(fontSize: 12),
                                       ),
-                                      backgroundColor: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.1),
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
                                       side: BorderSide(
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.3),
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     );
                                   }).toList(),

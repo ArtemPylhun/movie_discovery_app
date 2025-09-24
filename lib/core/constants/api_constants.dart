@@ -1,20 +1,18 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class ApiConstants {
   static const String baseUrl = 'https://api.themoviedb.org/3';
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
-  // Try environment variable first, then fall back to .env file
-  static String get apiKey {
-    const envKey = String.fromEnvironment('TMDB_KEY');
-    if (envKey.isNotEmpty) {
-      return envKey;
-    }
-    try {
-      return dotenv.env['TMDB_KEY'] ?? '';
-    } catch (e) {
-      // .env file not loaded, return empty string
-      return '';
+  // Get API key from compile-time environment variable
+  static const String apiKey = String.fromEnvironment(
+    'TMDB_KEY',
+    defaultValue: '',
+  );
+
+  static void validateApiKey() {
+    if (apiKey.isEmpty) {
+      throw Exception(
+        'TMDB_KEY not provided. Use: flutter run --dart-define=TMDB_KEY=your_key',
+      );
     }
   }
 

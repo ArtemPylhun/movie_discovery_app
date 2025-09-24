@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.movie_discovery_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36  // Required by path_provider_android and sqflite_android
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -25,7 +25,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 36  // Required by path_provider_android and sqflite_android
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

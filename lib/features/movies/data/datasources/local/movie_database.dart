@@ -37,29 +37,12 @@ class Favorites extends Table {
   Set<Column> get primaryKey => {movieId};
 }
 
-class Genres extends Table {
-  IntColumn get id => integer()();
-  TextColumn get name => text()();
-
-  @override
-  Set<Column> get primaryKey => {id};
-}
-
-class SearchCache extends Table {
-  TextColumn get query => text()();
-  TextColumn get results => text()(); // JSON encoded movie IDs
-  DateTimeColumn get cachedAt => dateTime().withDefault(currentDateAndTime)();
-
-  @override
-  Set<Column> get primaryKey => {query};
-}
-
-@DriftDatabase(tables: [Movies, Favorites, Genres, SearchCache])
+@DriftDatabase(tables: [Movies, Favorites])
 class MovieDatabase extends _$MovieDatabase {
   MovieDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -68,7 +51,12 @@ class MovieDatabase extends _$MovieDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // Handle future migrations here
+        if (from < 2) {
+          // Migration from v1 to v2: Remove Genres and SearchCache tables
+          // These tables are no longer used, so we recreate the entire database
+          await m.deleteTable('genres');
+          await m.deleteTable('search_cache');
+        }
       },
     );
   }
@@ -116,9 +104,6 @@ class MovieDatabase extends _$MovieDatabase {
     final oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
     await (delete(movies)
           ..where((m) => m.updatedAt.isSmallerThanValue(oneWeekAgo)))
-        .go();
-    await (delete(searchCache)
-          ..where((s) => s.cachedAt.isSmallerThanValue(oneWeekAgo)))
         .go();
   }
 }
