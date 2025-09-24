@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      drift_dev:drift_dev:
+        options:
+          # Disable table manager generation that causes deprecated method errors
+          generate_manager: false
