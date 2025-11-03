@@ -11,15 +11,19 @@ class CheckFavoriteStatus implements UseCase<bool, CheckFavoriteStatusParams> {
 
   @override
   Future<Either<Failure, bool>> call(CheckFavoriteStatusParams params) async {
-    return await repository.isFavorite(params.movieId);
+    return await repository.isFavorite(params.userId, params.movieId);
   }
 }
 
 class CheckFavoriteStatusParams extends Equatable {
-  const CheckFavoriteStatusParams({required this.movieId});
+  const CheckFavoriteStatusParams({
+    required this.userId,
+    required this.movieId,
+  });
 
+  final String userId;
   final int movieId;
 
   @override
-  List<Object> get props => [movieId];
+  List<Object> get props => [userId, movieId];
 }

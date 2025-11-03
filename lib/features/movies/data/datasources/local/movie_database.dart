@@ -30,11 +30,12 @@ class Movies extends Table {
 }
 
 class Favorites extends Table {
+  TextColumn get userId => text()(); // User ID from Firebase Auth
   IntColumn get movieId => integer().references(Movies, #id)();
   DateTimeColumn get addedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  Set<Column> get primaryKey => {movieId};
+  Set<Column> get primaryKey => {userId, movieId}; // Composite key
 }
 
 @DriftDatabase(tables: [Movies, Favorites])
@@ -42,7 +43,7 @@ class MovieDatabase extends _$MovieDatabase {
   MovieDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -56,6 +57,12 @@ class MovieDatabase extends _$MovieDatabase {
           // These tables are no longer used, so we recreate the entire database
           await m.deleteTable('genres');
           await m.deleteTable('search_cache');
+        }
+        if (from < 3) {
+          // Migration from v2 to v3: Add userId to Favorites table
+          // Drop old favorites table and recreate with userId column
+          await m.deleteTable('favorites');
+          await m.createTable(favorites);
         }
       },
     );
@@ -79,22 +86,27 @@ class MovieDatabase extends _$MovieDatabase {
 
   Future<void> clearMovies() => delete(movies).go();
 
-  // Favorites operations
-  Future<List<int>> getFavoriteMovieIds() async {
-    final favorites = await select(this.favorites).get();
-    return favorites.map((f) => f.movieId).toList();
+  // Favorites operations (user-specific)
+  Future<List<int>> getFavoriteMovieIds(String userId) async {
+    final userFavorites =
+        await (select(favorites)..where((f) => f.userId.equals(userId))).get();
+    return userFavorites.map((f) => f.movieId).toList();
   }
 
-  Future<void> addToFavorites(int movieId) =>
-      into(favorites).insert(FavoritesCompanion(movieId: Value(movieId)));
+  Future<void> addToFavorites(String userId, int movieId) =>
+      into(favorites).insert(
+          FavoritesCompanion(userId: Value(userId), movieId: Value(movieId)));
 
-  Future<void> removeFromFavorites(int movieId) =>
-      (delete(favorites)..where((f) => f.movieId.equals(movieId))).go();
+  Future<void> removeFromFavorites(String userId, int movieId) =>
+      (delete(favorites)
+            ..where((f) => f.userId.equals(userId) & f.movieId.equals(movieId)))
+          .go();
 
-  Future<bool> isFavorite(int movieId) async {
+  Future<bool> isFavorite(String userId, int movieId) async {
     final count = await (selectOnly(favorites)
           ..addColumns([favorites.movieId.count()])
-          ..where(favorites.movieId.equals(movieId)))
+          ..where(favorites.userId.equals(userId) &
+              favorites.movieId.equals(movieId)))
         .getSingle();
     return count.read(favorites.movieId.count())! > 0;
   }

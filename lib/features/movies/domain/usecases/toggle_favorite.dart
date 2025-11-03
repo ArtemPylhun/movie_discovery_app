@@ -11,15 +11,17 @@ class ToggleFavorite implements UseCase<void, ToggleFavoriteParams> {
 
   @override
   Future<Either<Failure, void>> call(ToggleFavoriteParams params) async {
-    final isFavoriteResult = await repository.isFavorite(params.movieId);
+    final isFavoriteResult =
+        await repository.isFavorite(params.userId, params.movieId);
 
     return isFavoriteResult.fold(
       (failure) => Left(failure),
       (isFavorite) async {
         if (isFavorite) {
-          return await repository.removeFromFavorites(params.movieId);
+          return await repository.removeFromFavorites(
+              params.userId, params.movieId);
         } else {
-          return await repository.addToFavorites(params.movieId);
+          return await repository.addToFavorites(params.userId, params.movieId);
         }
       },
     );
@@ -27,10 +29,14 @@ class ToggleFavorite implements UseCase<void, ToggleFavoriteParams> {
 }
 
 class ToggleFavoriteParams extends Equatable {
-  const ToggleFavoriteParams({required this.movieId});
+  const ToggleFavoriteParams({
+    required this.userId,
+    required this.movieId,
+  });
 
+  final String userId;
   final int movieId;
 
   @override
-  List<Object> get props => [movieId];
+  List<Object> get props => [userId, movieId];
 }

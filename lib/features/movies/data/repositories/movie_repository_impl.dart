@@ -4,6 +4,7 @@ import 'package:movie_discovery_app/core/errors/failures.dart';
 import 'package:movie_discovery_app/features/movies/data/datasources/local/movie_local_data_source.dart';
 import 'package:movie_discovery_app/features/movies/data/datasources/remote/movie_remote_data_source.dart';
 import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
+import 'package:movie_discovery_app/features/movies/domain/entities/video.dart';
 import 'package:movie_discovery_app/features/movies/domain/repositories/movie_repository.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -132,9 +133,9 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getFavoriteMovies() async {
+  Future<Either<Failure, List<Movie>>> getFavoriteMovies(String userId) async {
     try {
-      final favoriteIds = await localDataSource.getFavoriteMovieIds();
+      final favoriteIds = await localDataSource.getFavoriteMovieIds(userId);
       if (favoriteIds.isEmpty) {
         return const Right([]);
       }
@@ -149,9 +150,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, void>> addToFavorites(int movieId) async {
+  Future<Either<Failure, void>> addToFavorites(
+      String userId, int movieId) async {
     try {
-      await localDataSource.addToFavorites(movieId);
+      await localDataSource.addToFavorites(userId, movieId);
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure('Failed to add to favorites: ${e.toString()}'));
@@ -159,9 +161,10 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, void>> removeFromFavorites(int movieId) async {
+  Future<Either<Failure, void>> removeFromFavorites(
+      String userId, int movieId) async {
     try {
-      await localDataSource.removeFromFavorites(movieId);
+      await localDataSource.removeFromFavorites(userId, movieId);
       return const Right(null);
     } catch (e) {
       return Left(
@@ -170,13 +173,28 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> isFavorite(int movieId) async {
+  Future<Either<Failure, bool>> isFavorite(String userId, int movieId) async {
     try {
-      final isFav = await localDataSource.isFavorite(movieId);
+      final isFav = await localDataSource.isFavorite(userId, movieId);
       return Right(isFav);
     } catch (e) {
       return Left(
           CacheFailure('Failed to check favorite status: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Video>>> getMovieVideos(int movieId) async {
+    try {
+      final remoteVideos = await remoteDataSource.getMovieVideos(movieId);
+      return Right(
+          remoteVideos.results.map((video) => video.toEntity()).toList());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(CacheFailure('Failed to get movie videos: ${e.toString()}'));
     }
   }
 }

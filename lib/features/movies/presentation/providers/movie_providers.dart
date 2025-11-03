@@ -62,6 +62,7 @@ final upcomingMoviesProvider =
 final movieDetailsProvider =
     StateNotifierProvider.family<MovieDetailsNotifier, MovieDetailsState, int>(
   (ref, movieId) => MovieDetailsNotifier(
+    ref,
     ref.read(getMovieDetailsProvider),
     ref.read(checkFavoriteStatusProvider),
     movieId,
@@ -76,6 +77,7 @@ final searchMoviesStateProvider =
 final favoriteMoviesProvider =
     StateNotifierProvider<FavoriteMoviesNotifier, MovieListState>(
   (ref) => FavoriteMoviesNotifier(
+    ref,
     ref.read(getFavoriteMoviesProvider),
     ref.read(toggleFavoriteProvider),
   ),

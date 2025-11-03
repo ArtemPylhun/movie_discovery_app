@@ -1,0 +1,430 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Movie Discovery",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+
+  "homeTitle": "Movie Discovery",
+  "@homeTitle": {
+    "description": "Title shown in home screen app bar"
+  },
+
+  "tabPopular": "Popular",
+  "@tabPopular": {
+    "description": "Popular movies tab"
+  },
+
+  "tabTopRated": "Top Rated",
+  "@tabTopRated": {
+    "description": "Top rated movies tab"
+  },
+
+  "tabUpcoming": "Upcoming",
+  "@tabUpcoming": {
+    "description": "Upcoming movies tab"
+  },
+
+  "tabFavorites": "Favorites",
+  "@tabFavorites": {
+    "description": "Favorites movies tab"
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings menu item"
+  },
+
+  "searchMovies": "Search movies...",
+  "@searchMovies": {
+    "description": "Search bar hint text"
+  },
+
+  "searchForMovies": "Search for movies",
+  "@searchForMovies": {
+    "description": "Search screen initial message"
+  },
+
+  "noMoviesFound": "No movies found for \"{query}\"",
+  "@noMoviesFound": {
+    "description": "Message when search returns no results",
+    "placeholders": {
+      "query": {
+        "type": "String",
+        "example": "Avatar"
+      }
+    }
+  },
+
+  "noPopularMovies": "No popular movies found",
+  "@noPopularMovies": {
+    "description": "Empty state for popular movies"
+  },
+
+  "noTopRatedMovies": "No top rated movies found",
+  "@noTopRatedMovies": {
+    "description": "Empty state for top rated movies"
+  },
+
+  "noUpcomingMovies": "No upcoming movies found",
+  "@noUpcomingMovies": {
+    "description": "Empty state for upcoming movies"
+  },
+
+  "noFavoriteMovies": "No favorite movies yet.\nStart adding movies to your favorites!",
+  "@noFavoriteMovies": {
+    "description": "Empty state for favorite movies"
+  },
+
+  "error": "Error",
+  "@error": {
+    "description": "Generic error label"
+  },
+
+  "errorOccurred": "Oops! Something went wrong",
+  "@errorOccurred": {
+    "description": "Error message title"
+  },
+
+  "errorMessage": "Error: {message}",
+  "@errorMessage": {
+    "description": "Error message with details",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+
+  "movieDetailsTitle": "Movie Details",
+  "@movieDetailsTitle": {
+    "description": "Movie details screen title"
+  },
+
+  "overview": "Overview",
+  "@overview": {
+    "description": "Overview section title"
+  },
+
+  "noOverview": "No overview available.",
+  "@noOverview": {
+    "description": "Message when overview is empty"
+  },
+
+  "genres": "Genres",
+  "@genres": {
+    "description": "Genres section title"
+  },
+
+  "additionalInformation": "Additional Information",
+  "@additionalInformation": {
+    "description": "Additional information section title"
+  },
+
+  "trailer": "Trailer",
+  "@trailer": {
+    "description": "Trailer section title"
+  },
+
+  "popularity": "Popularity",
+  "@popularity": {
+    "description": "Popularity label"
+  },
+
+  "adultContent": "Adult Content",
+  "@adultContent": {
+    "description": "Adult content label"
+  },
+
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes option"
+  },
+
+  "no": "No",
+  "@no": {
+    "description": "No option"
+  },
+
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Sign in button text"
+  },
+
+  "signInToContinue": "Sign in to continue",
+  "@signInToContinue": {
+    "description": "Sign in subtitle"
+  },
+
+  "signUp": "Sign Up",
+  "@signUp": {
+    "description": "Sign up link text"
+  },
+
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Create account button text"
+  },
+
+  "joinMovieDiscovery": "Join Movie Discovery",
+  "@joinMovieDiscovery": {
+    "description": "Register screen title"
+  },
+
+  "createAccountSubtitle": "Create your account to get started",
+  "@createAccountSubtitle": {
+    "description": "Register screen subtitle"
+  },
+
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+
+  "displayName": "Display Name (Optional)",
+  "@displayName": {
+    "description": "Display name field label"
+  },
+
+  "pleaseEnterEmail": "Please enter your email",
+  "@pleaseEnterEmail": {
+    "description": "Email validation message"
+  },
+
+  "pleaseEnterValidEmail": "Please enter a valid email",
+  "@pleaseEnterValidEmail": {
+    "description": "Email format validation message"
+  },
+
+  "pleaseEnterPassword": "Please enter your password",
+  "@pleaseEnterPassword": {
+    "description": "Password validation message"
+  },
+
+  "pleaseEnterPasswordForRegister": "Please enter a password",
+  "@pleaseEnterPasswordForRegister": {
+    "description": "Password validation message for registration"
+  },
+
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Password length validation message"
+  },
+
+  "pleaseConfirmPassword": "Please confirm your password",
+  "@pleaseConfirmPassword": {
+    "description": "Confirm password validation message"
+  },
+
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Password mismatch validation message"
+  },
+
+  "or": "OR",
+  "@or": {
+    "description": "Divider text between login options"
+  },
+
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": {
+    "description": "Google sign in button text"
+  },
+
+  "dontHaveAccount": "Don't have an account? ",
+  "@dontHaveAccount": {
+    "description": "Sign up prompt text"
+  },
+
+  "alreadyHaveAccount": "Already have an account? ",
+  "@alreadyHaveAccount": {
+    "description": "Sign in prompt text"
+  },
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings screen title"
+  },
+
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Appearance section header"
+  },
+
+  "account": "Account",
+  "@account": {
+    "description": "Account section header"
+  },
+
+  "about": "About",
+  "@about": {
+    "description": "About section header"
+  },
+
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode setting label"
+  },
+
+  "enabled": "Enabled",
+  "@enabled": {
+    "description": "Enabled status text"
+  },
+
+  "disabled": "Disabled",
+  "@disabled": {
+    "description": "Disabled status text"
+  },
+
+  "language": "Language",
+  "@language": {
+    "description": "Language setting label"
+  },
+
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+
+  "languageUkrainian": "Українська",
+  "@languageUkrainian": {
+    "description": "Ukrainian language option"
+  },
+
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Language selection dialog title"
+  },
+
+  "accountInformation": "Account Information",
+  "@accountInformation": {
+    "description": "Account information menu item"
+  },
+
+  "viewProfileDetails": "View your profile details",
+  "@viewProfileDetails": {
+    "description": "Account information subtitle"
+  },
+
+  "accountDetailsManaged": "Your account details are managed through Firebase Authentication.",
+  "@accountDetailsManaged": {
+    "description": "Account details dialog content"
+  },
+
+  "signedInWith": "Signed in with your Firebase account",
+  "@signedInWith": {
+    "description": "Account signed in message"
+  },
+
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Sign out button text"
+  },
+
+  "signOutSubtitle": "Sign out of your account",
+  "@signOutSubtitle": {
+    "description": "Sign out menu item subtitle"
+  },
+
+  "signOutConfirmation": "Are you sure you want to sign out? You will need to sign in again to access your account.",
+  "@signOutConfirmation": {
+    "description": "Sign out confirmation message"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+
+  "aboutMovieDiscovery": "About Movie Discovery",
+  "@aboutMovieDiscovery": {
+    "description": "About dialog title"
+  },
+
+  "aboutDescription": "A modern Flutter application for discovering movies and TV shows.",
+  "@aboutDescription": {
+    "description": "About dialog description"
+  },
+
+  "featureBrowse": "Browse popular, top-rated, and upcoming movies",
+  "@featureBrowse": {
+    "description": "Feature list item"
+  },
+
+  "featureSearch": "Search for your favorite movies",
+  "@featureSearch": {
+    "description": "Feature list item"
+  },
+
+  "featureFavorites": "Save movies to your favorites",
+  "@featureFavorites": {
+    "description": "Feature list item"
+  },
+
+  "featureDarkMode": "Dark mode support",
+  "@featureDarkMode": {
+    "description": "Feature list item"
+  },
+
+  "poweredByTmdb": "Powered by The Movie Database (TMDb) API",
+  "@poweredByTmdb": {
+    "description": "TMDb attribution text"
+  },
+
+  "version": "Version",
+  "@version": {
+    "description": "Version label"
+  },
+
+  "versionInformation": "Version Information",
+  "@versionInformation": {
+    "description": "Version information dialog title"
+  },
+
+  "versionLabel": "Version",
+  "@versionLabel": {
+    "description": "Version row label"
+  },
+
+  "buildLabel": "Build",
+  "@buildLabel": {
+    "description": "Build row label"
+  },
+
+  "flutterSdkLabel": "Flutter SDK",
+  "@flutterSdkLabel": {
+    "description": "Flutter SDK row label"
+  },
+
+  "educationalProject": "Educational project for learning Flutter with Clean Architecture",
+  "@educationalProject": {
+    "description": "Educational project description"
+  }
+}

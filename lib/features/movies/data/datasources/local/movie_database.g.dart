@@ -729,13 +729,18 @@ class $FavoritesTable extends Favorites
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $FavoritesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _movieIdMeta =
       const VerificationMeta('movieId');
   @override
   late final GeneratedColumn<int> movieId = GeneratedColumn<int>(
       'movie_id', aliasedName, false,
       type: DriftSqlType.int,
-      requiredDuringInsert: false,
+      requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES movies (id)'));
   static const VerificationMeta _addedAtMeta =
@@ -747,7 +752,7 @@ class $FavoritesTable extends Favorites
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   @override
-  List<GeneratedColumn> get $columns => [movieId, addedAt];
+  List<GeneratedColumn> get $columns => [userId, movieId, addedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -758,9 +763,17 @@ class $FavoritesTable extends Favorites
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
     if (data.containsKey('movie_id')) {
       context.handle(_movieIdMeta,
           movieId.isAcceptableOrUnknown(data['movie_id']!, _movieIdMeta));
+    } else if (isInserting) {
+      context.missing(_movieIdMeta);
     }
     if (data.containsKey('added_at')) {
       context.handle(_addedAtMeta,
@@ -770,11 +783,13 @@ class $FavoritesTable extends Favorites
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {movieId};
+  Set<GeneratedColumn> get $primaryKey => {userId, movieId};
   @override
   Favorite map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Favorite(
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
       movieId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}movie_id'])!,
       addedAt: attachedDatabase.typeMapping
@@ -789,12 +804,15 @@ class $FavoritesTable extends Favorites
 }
 
 class Favorite extends DataClass implements Insertable<Favorite> {
+  final String userId;
   final int movieId;
   final DateTime addedAt;
-  const Favorite({required this.movieId, required this.addedAt});
+  const Favorite(
+      {required this.userId, required this.movieId, required this.addedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['user_id'] = Variable<String>(userId);
     map['movie_id'] = Variable<int>(movieId);
     map['added_at'] = Variable<DateTime>(addedAt);
     return map;
@@ -802,6 +820,7 @@ class Favorite extends DataClass implements Insertable<Favorite> {
 
   FavoritesCompanion toCompanion(bool nullToAbsent) {
     return FavoritesCompanion(
+      userId: Value(userId),
       movieId: Value(movieId),
       addedAt: Value(addedAt),
     );
@@ -811,6 +830,7 @@ class Favorite extends DataClass implements Insertable<Favorite> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Favorite(
+      userId: serializer.fromJson<String>(json['userId']),
       movieId: serializer.fromJson<int>(json['movieId']),
       addedAt: serializer.fromJson<DateTime>(json['addedAt']),
     );
@@ -819,17 +839,21 @@ class Favorite extends DataClass implements Insertable<Favorite> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'userId': serializer.toJson<String>(userId),
       'movieId': serializer.toJson<int>(movieId),
       'addedAt': serializer.toJson<DateTime>(addedAt),
     };
   }
 
-  Favorite copyWith({int? movieId, DateTime? addedAt}) => Favorite(
+  Favorite copyWith({String? userId, int? movieId, DateTime? addedAt}) =>
+      Favorite(
+        userId: userId ?? this.userId,
         movieId: movieId ?? this.movieId,
         addedAt: addedAt ?? this.addedAt,
       );
   Favorite copyWithCompanion(FavoritesCompanion data) {
     return Favorite(
+      userId: data.userId.present ? data.userId.value : this.userId,
       movieId: data.movieId.present ? data.movieId.value : this.movieId,
       addedAt: data.addedAt.present ? data.addedAt.value : this.addedAt,
     );
@@ -838,6 +862,7 @@ class Favorite extends DataClass implements Insertable<Favorite> {
   @override
   String toString() {
     return (StringBuffer('Favorite(')
+          ..write('userId: $userId, ')
           ..write('movieId: $movieId, ')
           ..write('addedAt: $addedAt')
           ..write(')'))
@@ -845,51 +870,75 @@ class Favorite extends DataClass implements Insertable<Favorite> {
   }
 
   @override
-  int get hashCode => Object.hash(movieId, addedAt);
+  int get hashCode => Object.hash(userId, movieId, addedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Favorite &&
+          other.userId == this.userId &&
           other.movieId == this.movieId &&
           other.addedAt == this.addedAt);
 }
 
 class FavoritesCompanion extends UpdateCompanion<Favorite> {
+  final Value<String> userId;
   final Value<int> movieId;
   final Value<DateTime> addedAt;
+  final Value<int> rowid;
   const FavoritesCompanion({
+    this.userId = const Value.absent(),
     this.movieId = const Value.absent(),
     this.addedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   FavoritesCompanion.insert({
-    this.movieId = const Value.absent(),
+    required String userId,
+    required int movieId,
     this.addedAt = const Value.absent(),
-  });
+    this.rowid = const Value.absent(),
+  })  : userId = Value(userId),
+        movieId = Value(movieId);
   static Insertable<Favorite> custom({
+    Expression<String>? userId,
     Expression<int>? movieId,
     Expression<DateTime>? addedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (userId != null) 'user_id': userId,
       if (movieId != null) 'movie_id': movieId,
       if (addedAt != null) 'added_at': addedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  FavoritesCompanion copyWith({Value<int>? movieId, Value<DateTime>? addedAt}) {
+  FavoritesCompanion copyWith(
+      {Value<String>? userId,
+      Value<int>? movieId,
+      Value<DateTime>? addedAt,
+      Value<int>? rowid}) {
     return FavoritesCompanion(
+      userId: userId ?? this.userId,
       movieId: movieId ?? this.movieId,
       addedAt: addedAt ?? this.addedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
     if (movieId.present) {
       map['movie_id'] = Variable<int>(movieId.value);
     }
     if (addedAt.present) {
       map['added_at'] = Variable<DateTime>(addedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -897,8 +946,10 @@ class FavoritesCompanion extends UpdateCompanion<Favorite> {
   @override
   String toString() {
     return (StringBuffer('FavoritesCompanion(')
+          ..write('userId: $userId, ')
           ..write('movieId: $movieId, ')
-          ..write('addedAt: $addedAt')
+          ..write('addedAt: $addedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_discovery_app/core/theme/app_colors.dart';
+import 'package:movie_discovery_app/core/theme/app_spacing.dart';
 import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/presentation/providers/movie_providers.dart';
 import 'package:movie_discovery_app/features/movies/presentation/providers/movie_state.dart';
 import 'package:movie_discovery_app/features/movies/presentation/widgets/movie_card.dart';
 import 'package:movie_discovery_app/features/movies/presentation/widgets/movie_loading_grid.dart';
+import 'package:movie_discovery_app/l10n/app_localizations.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -41,58 +44,112 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final searchState = ref.watch(searchMoviesStateProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          focusNode: _searchFocusNode,
-          decoration: const InputDecoration(
-            hintText: 'Search movies...',
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
-          style: const TextStyle(fontSize: 18),
-          textInputAction: TextInputAction.search,
-          onSubmitted: _performSearch,
-          onChanged: (query) {
-            if (query.trim().isEmpty) {
-              // Clear search results when query is empty
-              ref.read(searchQueryProvider.notifier).state = '';
-            }
-          },
+        backgroundColor: AppColors.primary,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textWhite),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Container(
+          constraints: const BoxConstraints(
+            maxHeight: 46,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+          ),
+          child: TextField(
+            controller: _searchController,
+            focusNode: _searchFocusNode,
+            decoration: InputDecoration(
+              hintText: l10n.searchMovies,
+              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[400]
+                        : AppColors.textTertiary,
+                    fontSize: 16,
+                  ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: 12,
+              ),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[300]
+                    : AppColors.textSecondary,
+                size: 22,
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 48,
+                minHeight: 46,
+              ),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.clear,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[300]
+                            : AppColors.textSecondary,
+                        size: 20,
+                      ),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(
+                        minWidth: 48,
+                        minHeight: 46,
+                      ),
+                      onPressed: () {
+                        _searchController.clear();
+                        ref.read(searchQueryProvider.notifier).state = '';
+                        setState(() {}); // Update to hide clear button
+                      },
+                    )
+                  : null,
+              suffixIconConstraints: const BoxConstraints(
+                minWidth: 48,
+                minHeight: 46,
+              ),
+            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 16,
+                ),
+            textInputAction: TextInputAction.search,
+            onSubmitted: _performSearch,
+            onChanged: (query) {
+              setState(() {}); // Update to show/hide clear button
+              if (query.trim().isEmpty) {
+                ref.read(searchQueryProvider.notifier).state = '';
+              }
+            },
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.search, color: AppColors.textWhite),
             onPressed: () => _performSearch(_searchController.text),
           ),
-          if (_searchController.text.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () {
-                _searchController.clear();
-                ref.read(searchQueryProvider.notifier).state = '';
-                FocusScope.of(context).unfocus();
-              },
-            ),
+          const SizedBox(width: AppSpacing.xs),
         ],
       ),
       body: searchState.whenSearch(
-        initial: () => const Center(
+        initial: () => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.search,
                 size: 64,
                 color: Colors.grey,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
-                'Search for movies',
-                style: TextStyle(
+                l10n.searchForMovies,
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.grey,
                 ),
@@ -114,7 +171,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'No movies found for "$query"',
+                      l10n.noMoviesFound(query),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 18,
@@ -136,14 +193,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Error: $message',
+                l10n.errorMessage(message),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => _performSearch(_searchController.text),
-                child: const Text('Retry'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
