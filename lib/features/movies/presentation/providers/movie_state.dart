@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_discovery_app/core/usecases/base_usecase.dart';
+import 'package:movie_discovery_app/features/auth/presentation/providers/auth_providers.dart';
+import 'package:movie_discovery_app/features/auth/presentation/providers/auth_state.dart';
 import 'package:movie_discovery_app/features/movies/domain/entities/movie.dart';
 import 'package:movie_discovery_app/features/movies/domain/usecases/get_movie_details.dart';
 import 'package:movie_discovery_app/features/movies/domain/usecases/search_movies.dart';
@@ -191,9 +193,10 @@ class MovieListNotifier extends StateNotifier<MovieListState> {
   }
 }
 
-// Movie Details Notifier
+// Movie Details Notifier (user-specific favorites)
 class MovieDetailsNotifier extends StateNotifier<MovieDetailsState> {
   MovieDetailsNotifier(
+    this._ref,
     this._getMovieDetails,
     this._checkFavoriteStatus,
     this._movieId,
@@ -201,9 +204,19 @@ class MovieDetailsNotifier extends StateNotifier<MovieDetailsState> {
     loadMovieDetails();
   }
 
+  final Ref _ref;
   final GetMovieDetails _getMovieDetails;
   final CheckFavoriteStatus _checkFavoriteStatus;
   final int _movieId;
+
+  // Get current user ID from auth state
+  String? get _currentUserId {
+    final authState = _ref.read(authProvider);
+    if (authState is Authenticated) {
+      return authState.user.id;
+    }
+    return null;
+  }
 
   Future<void> loadMovieDetails() async {
     state = const MovieDetailsLoading();
@@ -214,8 +227,14 @@ class MovieDetailsNotifier extends StateNotifier<MovieDetailsState> {
     movieResult.fold(
       (failure) => state = MovieDetailsError(failure.message),
       (movie) async {
+        final userId = _currentUserId;
+        if (userId == null) {
+          state = MovieDetailsLoaded(movie, false);
+          return;
+        }
+
         final favoriteResult = await _checkFavoriteStatus.call(
-          CheckFavoriteStatusParams(movieId: _movieId),
+          CheckFavoriteStatusParams(userId: userId, movieId: _movieId),
         );
 
         favoriteResult.fold(
@@ -304,18 +323,39 @@ class SearchMoviesNotifier extends StateNotifier<SearchMoviesState> {
   }
 }
 
-// Favorite Movies Notifier
+// Favorite Movies Notifier (user-specific)
 class FavoriteMoviesNotifier extends StateNotifier<MovieListState> {
-  FavoriteMoviesNotifier(this._getFavoriteMovies, this._toggleFavorite)
-      : super(const MovieListInitial());
+  FavoriteMoviesNotifier(
+    this._ref,
+    this._getFavoriteMovies,
+    this._toggleFavorite,
+  ) : super(const MovieListInitial());
 
+  final Ref _ref;
   final GetFavoriteMovies _getFavoriteMovies;
   final ToggleFavorite _toggleFavorite;
 
+  // Get current user ID from auth state
+  String? get _currentUserId {
+    final authState = _ref.read(authProvider);
+    if (authState is Authenticated) {
+      return authState.user.id;
+    }
+    return null;
+  }
+
   Future<void> loadFavoriteMovies() async {
+    final userId = _currentUserId;
+    if (userId == null) {
+      state = const MovieListError('User not authenticated');
+      return;
+    }
+
     state = const MovieListLoading();
 
-    final result = await _getFavoriteMovies.call(const NoParams());
+    final result = await _getFavoriteMovies.call(
+      GetFavoriteMoviesParams(userId: userId),
+    );
 
     result.fold(
       (failure) => state = MovieListError(failure.message),
@@ -324,8 +364,12 @@ class FavoriteMoviesNotifier extends StateNotifier<MovieListState> {
   }
 
   Future<void> toggleFavorite(int movieId) async {
-    final result =
-        await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
+    final userId = _currentUserId;
+    if (userId == null) return;
+
+    final result = await _toggleFavorite.call(
+      ToggleFavoriteParams(userId: userId, movieId: movieId),
+    );
 
     result.fold(
       (failure) =>

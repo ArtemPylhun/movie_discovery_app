@@ -22,8 +22,10 @@ class ApiConstants {
   static const String upcomingMovies = '/movie/upcoming';
   static const String searchMovies = '/search/movie';
   static const String movieDetails = '/movie';
-  static const String movieVideos = '/movie/{id}/videos';
   static const String movieCredits = '/movie/{id}/credits';
+
+  // Movie Videos - format: /movie/{movie_id}/videos
+  static String movieVideos(int movieId) => '/movie/$movieId/videos';
 
   // Parameters
   static const String apiKeyParam = 'api_key';

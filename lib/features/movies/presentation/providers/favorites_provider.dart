@@ -1,11 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_discovery_app/core/di/injection.dart';
+import 'package:movie_discovery_app/features/auth/presentation/providers/auth_providers.dart';
+import 'package:movie_discovery_app/features/auth/presentation/providers/auth_state.dart';
 import 'package:movie_discovery_app/features/movies/domain/usecases/toggle_favorite.dart';
 import 'package:movie_discovery_app/features/movies/domain/usecases/check_favorite_status.dart';
 
-// Favorites Action Provider
+// Favorites Action Provider (user-specific)
 final favoritesActionProvider = Provider<FavoritesAction>(
   (ref) => FavoritesAction(
+    ref,
     getIt<ToggleFavorite>(),
     getIt<CheckFavoriteStatus>(),
   ),
@@ -21,21 +24,36 @@ final movieFavoriteStatusProvider =
 );
 
 class FavoritesAction {
-  const FavoritesAction(this._toggleFavorite, this._checkFavoriteStatus);
+  const FavoritesAction(
+      this._ref, this._toggleFavorite, this._checkFavoriteStatus);
 
+  final Ref _ref;
   final ToggleFavorite _toggleFavorite;
   final CheckFavoriteStatus _checkFavoriteStatus;
 
+  // Get current user ID from auth state
+  String? get _currentUserId {
+    final authState = _ref.read(authProvider);
+    if (authState is Authenticated) {
+      return authState.user.id;
+    }
+    return null;
+  }
+
   Future<bool> toggleFavorite(int movieId) async {
-    final result =
-        await _toggleFavorite.call(ToggleFavoriteParams(movieId: movieId));
+    final userId = _currentUserId;
+    if (userId == null) return false;
+
+    final result = await _toggleFavorite.call(
+      ToggleFavoriteParams(userId: userId, movieId: movieId),
+    );
 
     return result.fold(
       (failure) => false, // Return false if toggle failed
       (_) async {
         // Check the new status after toggling
         final statusResult = await _checkFavoriteStatus.call(
-          CheckFavoriteStatusParams(movieId: movieId),
+          CheckFavoriteStatusParams(userId: userId, movieId: movieId),
         );
         return statusResult.fold(
           (failure) => false,
@@ -46,8 +64,11 @@ class FavoritesAction {
   }
 
   Future<bool> checkFavoriteStatus(int movieId) async {
+    final userId = _currentUserId;
+    if (userId == null) return false;
+
     final result = await _checkFavoriteStatus.call(
-      CheckFavoriteStatusParams(movieId: movieId),
+      CheckFavoriteStatusParams(userId: userId, movieId: movieId),
     );
 
     return result.fold(

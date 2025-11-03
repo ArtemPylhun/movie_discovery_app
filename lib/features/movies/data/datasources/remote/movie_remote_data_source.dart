@@ -1,6 +1,7 @@
 import 'package:movie_discovery_app/core/constants/api_constants.dart';
 import 'package:movie_discovery_app/core/network/api_client.dart';
 import 'package:movie_discovery_app/features/movies/data/models/movie_model.dart';
+import 'package:movie_discovery_app/features/movies/data/models/video_model.dart';
 
 abstract class MovieRemoteDataSource {
   Future<MovieListResponse> getPopularMovies(int page);
@@ -8,6 +9,7 @@ abstract class MovieRemoteDataSource {
   Future<MovieListResponse> getUpcomingMovies(int page);
   Future<MovieListResponse> searchMovies(String query, int page);
   Future<MovieModel> getMovieDetails(int movieId);
+  Future<VideoListResponse> getMovieVideos(int movieId);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -64,5 +66,12 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         await apiClient.get('${ApiConstants.movieDetails}/$movieId');
 
     return MovieModel.fromJson(response.data!);
+  }
+
+  @override
+  Future<VideoListResponse> getMovieVideos(int movieId) async {
+    final response = await apiClient.get(ApiConstants.movieVideos(movieId));
+
+    return VideoListResponse.fromJson(response.data!);
   }
 }

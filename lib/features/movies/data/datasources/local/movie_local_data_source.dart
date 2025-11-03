@@ -8,10 +8,10 @@ abstract class MovieLocalDataSource {
   Future<void> cacheMovies(List<MovieModel> movies);
   Future<void> cacheMovie(MovieModel movie);
   Future<void> clearCache();
-  Future<List<int>> getFavoriteMovieIds();
-  Future<void> addToFavorites(int movieId);
-  Future<void> removeFromFavorites(int movieId);
-  Future<bool> isFavorite(int movieId);
+  Future<List<int>> getFavoriteMovieIds(String userId);
+  Future<void> addToFavorites(String userId, int movieId);
+  Future<void> removeFromFavorites(String userId, int movieId);
+  Future<bool> isFavorite(String userId, int movieId);
 }
 
 class MovieLocalDataSourceImpl implements MovieLocalDataSource {
@@ -50,23 +50,23 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   }
 
   @override
-  Future<List<int>> getFavoriteMovieIds() async {
-    return await database.getFavoriteMovieIds();
+  Future<List<int>> getFavoriteMovieIds(String userId) async {
+    return await database.getFavoriteMovieIds(userId);
   }
 
   @override
-  Future<void> addToFavorites(int movieId) async {
-    await database.addToFavorites(movieId);
+  Future<void> addToFavorites(String userId, int movieId) async {
+    await database.addToFavorites(userId, movieId);
   }
 
   @override
-  Future<void> removeFromFavorites(int movieId) async {
-    await database.removeFromFavorites(movieId);
+  Future<void> removeFromFavorites(String userId, int movieId) async {
+    await database.removeFromFavorites(userId, movieId);
   }
 
   @override
-  Future<bool> isFavorite(int movieId) async {
-    return await database.isFavorite(movieId);
+  Future<bool> isFavorite(String userId, int movieId) async {
+    return await database.isFavorite(userId, movieId);
   }
 
   // Helper methods for conversion
