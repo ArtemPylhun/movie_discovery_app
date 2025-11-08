@@ -13,6 +13,7 @@ import 'package:movie_discovery_app/features/auth/presentation/providers/auth_pr
 import 'package:movie_discovery_app/features/auth/presentation/providers/auth_state.dart';
 import 'package:movie_discovery_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:movie_discovery_app/features/movies/presentation/screens/home_screen.dart';
+import 'package:movie_discovery_app/firebase_options.dart';
 import 'package:movie_discovery_app/l10n/app_localizations.dart';
 
 void main() async {
@@ -21,8 +22,10 @@ void main() async {
   // Validate API key is provided via --dart-define
   ApiConstants.validateApiKey();
 
-  // Initialize Firebase
-  await Firebase.initializeApp();
+  // Initialize Firebase with platform-specific options
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Initialize Hive for local storage
   await HiveStorage.init();
