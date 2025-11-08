@@ -27,6 +27,7 @@ void main() {
     // The app should show either login screen or home screen
     expect(find.text('Movie Discovery'), findsWidgets);
 
+    // ignore: avoid_print
     print('✅ App launched successfully');
   });
 }

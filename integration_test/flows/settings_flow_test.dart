@@ -221,8 +221,8 @@ void main() {
 
         for (final option in expectedOptions) {
           // Options may or may not exist depending on implementation
-          final optionFinder = find.text(option);
           // Just verify screen is displayed, don't fail if option is missing
+          find.text(option);
         }
 
         // Verify settings screen is functional
@@ -274,7 +274,7 @@ void main() {
 
         // Look for user info (email, name, avatar)
         // These are optional based on authentication state
-        final circleAvatars = find.byType(CircleAvatar);
+        find.byType(CircleAvatar);
 
         // Just verify settings screen works
         expect(find.byIcon(Icons.arrow_back), findsOneWidget);

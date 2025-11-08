@@ -9,6 +9,6 @@ class IntegrationTestHelper {
     await GetIt.instance.reset();
 
     // Give it a moment to fully reset
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
   }
 }

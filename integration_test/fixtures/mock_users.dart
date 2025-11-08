@@ -1,14 +1,14 @@
 /// Test user data for integration tests
 class TestUser {
-  final String email;
-  final String password;
-  final String displayName;
-
   const TestUser({
     required this.email,
     required this.password,
     required this.displayName,
   });
+
+  final String email;
+  final String password;
+  final String displayName;
 }
 
 class TestUsers {

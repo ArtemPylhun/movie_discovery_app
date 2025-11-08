@@ -48,7 +48,9 @@ void main() {
     // Verify app loaded - should show either login or home screen
     expect(find.text('Movie Discovery'), findsWidgets);
 
+    // ignore: avoid_print
     print('✅ Integration test smoke test passed');
+    // ignore: avoid_print
     print('📋 For comprehensive testing, run individual flow test files');
   });
 }
