@@ -56,7 +56,7 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Run unit tests
+      - name: Run unit and widget tests
         run: flutter test --coverage --reporter=github
 
       - name: Upload coverage to Codecov
@@ -64,8 +64,99 @@ jobs:
         with:
           file: coverage/lcov.info
           fail_ci_if_error: false
+          flags: unit-tests
 
-  build:
+  integration-test-android:
+    runs-on: macos-latest
+    needs: [analyze, test]
+    # Only run integration tests on main branch or manual workflow dispatch
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Decode google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
+
+      - name: Run Android emulator and integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          arch: x86_64
+          profile: Nexus 6
+          script: flutter test integration_test/app_test.dart --dart-define=TMDB_KEY=${{ secrets.TMDB_KEY }}
+
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-integration-test-results
+          path: |
+            integration_test/screenshots/
+            integration_test/logs/
+          retention-days: 7
+
+  integration-test-ios:
+    runs-on: macos-latest
+    needs: [analyze, test]
+    # Only run integration tests on main branch or manual workflow dispatch
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: List available simulators
+        run: xcrun simctl list devices available
+
+      - name: Boot iOS Simulator
+        run: |
+          UDID=$(xcrun simctl list devices available | grep -m 1 "iPhone 14" | grep -E -o -i "([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})")
+          xcrun simctl boot "${UDID}"
+
+      - name: Run integration tests on iOS
+        run: flutter test integration_test/app_test.dart -d iPhone --dart-define=TMDB_KEY=${{ secrets.TMDB_KEY }}
+
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-integration-test-results
+          path: |
+            integration_test/screenshots/
+            integration_test/logs/
+          retention-days: 7
+
+  build-android:
     runs-on: ubuntu-latest
     needs: [analyze, test]
 
@@ -91,7 +182,7 @@ jobs:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
 
-      - name: Build APK
+      - name: Build APK (Release)
         run: |
           flutter clean
           flutter pub get
@@ -103,3 +194,90 @@ jobs:
           name: release-apk-${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
+
+      - name: Build APK (Obfuscated)
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build apk --release --obfuscate --split-debug-info=build/debug-info --dart-define=TMDB_KEY=${{ secrets.TMDB_KEY }}
+
+      - name: Upload Obfuscated APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk-obfuscated-${{ github.run_number }}
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+
+      - name: Upload Debug Symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-symbols-android-${{ github.run_number }}
+          path: build/debug-info/
+          retention-days: 90
+
+  build-ios:
+    runs-on: macos-latest
+    needs: [analyze, test]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build iOS (Release)
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build ios --release --no-codesign --dart-define=TMDB_KEY=${{ secrets.TMDB_KEY }}
+
+      - name: Create IPA archive
+        run: |
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r app-release.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa-${{ github.run_number }}
+          path: app-release.ipa
+          retention-days: 30
+
+      - name: Build iOS (Obfuscated)
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build ios --release --no-codesign --obfuscate --split-debug-info=build/debug-info --dart-define=TMDB_KEY=${{ secrets.TMDB_KEY }}
+
+      - name: Create Obfuscated IPA archive
+        run: |
+          rm -rf Payload
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r app-release-obfuscated.ipa Payload
+
+      - name: Upload Obfuscated IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa-obfuscated-${{ github.run_number }}
+          path: app-release-obfuscated.ipa
+          retention-days: 30
+
+      - name: Upload Debug Symbols (iOS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-symbols-ios-${{ github.run_number }}
+          path: build/debug-info/
+          retention-days: 90

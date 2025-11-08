@@ -1,101 +1,54 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:movie_discovery_app/main.dart' as app;
 
+/// Main integration test file - Basic smoke test
+///
+/// ⚠️ IMPORTANT: Due to app initialization conflicts when calling app.main()
+/// multiple times, this file only runs a basic smoke test.
+///
+/// For comprehensive integration testing, run individual flow test files:
+///
+/// ```bash
+/// # Set API key first (Windows)
+/// set TMDB_KEY=your_api_key_here
+///
+/// # Run individual flow tests
+/// flutter test integration_test/flows/authentication_flow_test.dart --dart-define=TMDB_KEY=%TMDB_KEY%
+/// flutter test integration_test/flows/movie_browsing_flow_test.dart --dart-define=TMDB_KEY=%TMDB_KEY%
+/// flutter test integration_test/flows/search_flow_test.dart --dart-define=TMDB_KEY=%TMDB_KEY%
+/// flutter test integration_test/flows/favorites_flow_test.dart --dart-define=TMDB_KEY=%TMDB_KEY%
+/// flutter test integration_test/flows/settings_flow_test.dart --dart-define=TMDB_KEY=%TMDB_KEY%
+/// ```
+///
+/// Mac/Linux:
+/// ```bash
+/// export TMDB_KEY=your_api_key_here
+/// flutter test integration_test/flows/authentication_flow_test.dart --dart-define=TMDB_KEY=$TMDB_KEY
+/// ```
+///
+/// Test Coverage Available:
+/// - flows/authentication_flow_test.dart: 8 tests - Login, logout, registration, error handling
+/// - flows/movie_browsing_flow_test.dart: 8 tests - Tab navigation, movie details, scrolling
+/// - flows/search_flow_test.dart: 10 tests - Movie search, results, empty states
+/// - flows/favorites_flow_test.dart: 10 tests - Add/remove favorites, persistence
+/// - flows/settings_flow_test.dart: 10 tests - Theme toggle, language change, preferences
+///
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Movie Discovery App Integration Tests', () {
-    testWidgets('Complete user flow: Login -> Browse Movies -> Logout',
-        (WidgetTester tester) async {
-      // Start the app
-      app.main();
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+  testWidgets('Smoke test - App launches successfully',
+      (WidgetTester tester) async {
+    // Launch the app
+    app.main();
 
-      // Should show LoginScreen initially (if not authenticated)
-      expect(
-        find.text('Movie Discovery'),
-        findsWidgets, // Changed to findsWidgets since title appears in multiple places
-      );
+    // Wait for app to initialize
+    await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // Note: Actual login requires Firebase setup
-      // This test demonstrates the flow structure
-      // In real scenario, you would:
-      // 1. Enter test credentials
-      // 2. Tap login button
-      // 3. Wait for authentication
-      // 4. Verify HomeScreen appears
+    // Verify app loaded - should show either login or home screen
+    expect(find.text('Movie Discovery'), findsWidgets);
 
-      // Check if login form elements exist
-      final emailField = find.byType(TextFormField).first;
-      final passwordField = find.byType(TextFormField).last;
-
-      if (emailField.evaluate().isNotEmpty) {
-        expect(emailField, findsOneWidget);
-        expect(passwordField, findsOneWidget);
-      }
-
-      // Test would continue with:
-      // - Entering email/password
-      // - Submitting form
-      // - Navigating through movie tabs
-      // - Adding to favorites
-      // - Searching movies
-      // - Logging out
-    });
-
-    testWidgets('Movie search and favorites flow', (WidgetTester tester) async {
-      // This test would verify:
-      // 1. User can search for movies
-      // 2. User can tap on movie to see details
-      // 3. User can add movie to favorites
-      // 4. Favorite persists across app restarts
-
-      app.main();
-      await tester.pumpAndSettle(const Duration(seconds: 5));
-
-      // Test structure (requires authenticated state):
-      // 1. Tap on search bar
-      // 2. Enter movie name
-      // 3. Verify search results appear
-      // 4. Tap on a movie card
-      // 5. Verify movie details screen appears
-      // 6. Tap favorite button
-      // 7. Go back to home
-      // 8. Navigate to favorites tab
-      // 9. Verify movie appears in favorites
-    });
-
-    testWidgets('Offline mode functionality', (WidgetTester tester) async {
-      // This test would verify:
-      // 1. App loads cached data when offline
-      // 2. Error messages are appropriate
-      // 3. UI remains functional
-
-      app.main();
-      await tester.pumpAndSettle(const Duration(seconds: 5));
-
-      // Test structure:
-      // 1. Load app with network
-      // 2. Disable network (mock)
-      // 3. Restart app
-      // 4. Verify cached movies appear
-      // 5. Verify offline indicator (if implemented)
-    });
-
-    testWidgets('Navigation between all screens', (WidgetTester tester) async {
-      // This test verifies complete navigation flow
-      app.main();
-      await tester.pumpAndSettle(const Duration(seconds: 5));
-
-      // Test structure:
-      // 1. Login screen -> Home screen
-      // 2. Home -> Search screen
-      // 3. Home -> Movie Details
-      // 4. Movie Details -> Back to Home
-      // 5. Switch between tabs (Popular, Top Rated, Upcoming, Favorites)
-      // 6. Logout -> Back to Login
-    });
+    print('✅ Integration test smoke test passed');
+    print('📋 For comprehensive testing, run individual flow test files');
   });
 }
